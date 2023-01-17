@@ -1,5 +1,6 @@
 package com.example.blackcomedyfinal.ui.home;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -41,11 +42,15 @@ import java.util.Map;
 public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
-
     private jokesAdapter jokesAdapter;
     private singleJoke jokesArray =  singleJoke.getInstance();
-
     Utilizadores utilizador;
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ListJokes();
+    }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -57,13 +62,9 @@ public class HomeFragment extends Fragment {
         View root = binding.getRoot();
         utilizador = singleuser.utilizador.get(0);
 
-
-
         TextView textView = binding.textView5;
         textView.setText("Hello " + utilizador.getNome() );
         Button btnPublish = binding.btnPublish;
-
-
 
         btnPublish.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,11 +77,11 @@ public class HomeFragment extends Fragment {
         });
 
 
-        ListJokes();
         return root;
     }
 
 
+    @SuppressLint("NotifyDataSetChanged")
     public void ListJokes(){
 
         RecyclerView recyclerView = binding.recycleViewJokes;
@@ -101,6 +102,7 @@ public class HomeFragment extends Fragment {
                                 jokes.setJokeDate(document.get("comedyDate").toString());
                                 jokes.setUser(document.get("user"));
 
+
                                 jokesArray.add(jokes);
                             }
                         } else {
@@ -117,6 +119,8 @@ public class HomeFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(jokesAdapter);
+
+        jokesAdapter.notifyDataSetChanged();
 
     }
 
@@ -139,8 +143,10 @@ public class HomeFragment extends Fragment {
 
             comedy.put("comedyText", joke);
             comedy.put("comedyAudio", null);
+            comedy.put("comedyUserLikes", null );
             comedy.put("comedyDate",currentTime.toString());
             comedy.put("user", utilizador);
+
 
             // Add a new document with a generated ID
             db.collection("comedy")

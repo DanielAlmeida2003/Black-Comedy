@@ -107,6 +107,8 @@ public class Register extends AppCompatActivity {
                     user.put("Nome", nome);
                     user.put("Email", email);
                     user.put("Password", pass);
+                    user.put("Bio", "");
+                    user.put("Followers", null);
 
                     // Add a new document with a generated ID
                     db.collection("users")
