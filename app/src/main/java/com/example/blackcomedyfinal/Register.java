@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -17,6 +18,8 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,6 +27,7 @@ import java.util.Map;
 
 public class Register extends AppCompatActivity {
 
+    String urlImage = "";
 
 
     @Override
@@ -59,6 +63,12 @@ public class Register extends AppCompatActivity {
     public void registo(String nome, String email, String pass, String cpass){
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+
+        //Obtenha a referência ao arquivo de imagem no Cloud Storage:
+        StorageReference imageRef = storage.getReference("profiles/profile.png");
+
         EditText editNome = findViewById(R.id.inputName2);
         EditText editEmail = findViewById(R.id.inputEmail);
         EditText editPass = findViewById(R.id.inputPassword2);
@@ -102,31 +112,50 @@ public class Register extends AppCompatActivity {
 
                 }else{
 
-                    // Create a new user with a first and last name
-                    Map<String, Object> user = new HashMap<>();
-                    user.put("Nome", nome);
-                    user.put("Email", email);
-                    user.put("Password", pass);
+                    //Obtenha a URL da imagem:
+                    imageRef.getDownloadUrl()
+                        .addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
 
-                    // Add a new document with a generated ID
-                    db.collection("users")
-                            .add(user)
-                            .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                @Override
-                                public void onSuccess(DocumentReference documentReference) {
+                            // Create a new user with a first and last name
+                            Map<String, Object> user = new HashMap<>();
+                            user.put("Nome", nome);
+                            user.put("Email", email);
+                            user.put("Password", pass);
+                            urlImage = uri.toString();
+                            user.put("ImagemDePerfil", urlImage);
+                            user.put("CaminhoImagem", "profiles/profile.png");
+                            user.put("Followers", null);
+                            user.put("Following", null);
 
-                                    Toast.makeText(Register.this, "Registado com sucesso", Toast.LENGTH_SHORT).show();
-                                    Intent in = new Intent(getApplicationContext(), MainActivity.class);
-                                    startActivity(in);
+                            // Add a new document with a generated ID
+                            db.collection("users")
+                                    .add(user)
+                                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                        @Override
+                                        public void onSuccess(DocumentReference documentReference) {
 
-                                }
-                            })
-                            .addOnFailureListener(new OnFailureListener() {
+                                            Toast.makeText(Register.this, "Registado com sucesso", Toast.LENGTH_SHORT).show();
+                                            Intent in = new Intent(getApplicationContext(), MainActivity.class);
+                                            startActivity(in);
+
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Log.w(TAG, "Error adding document", e);
+                                        }
+                                    });
+
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
-                                    Log.w(TAG, "Error adding document", e);
+                                    Log.w(TAG, "Error adding Imagem", e);
                                 }
-                            });
+                    });
 
 
 

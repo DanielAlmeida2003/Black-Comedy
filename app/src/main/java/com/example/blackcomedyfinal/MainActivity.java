@@ -18,7 +18,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-
+import com.google.firebase.storage.StorageReference;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+
 
     public void login(String email, String pass) {
 
@@ -81,12 +82,17 @@ public class MainActivity extends AppCompatActivity {
                                 String idUser = "";
                                 String nomeUser = "";
                                 String emailUser = "";
+                                String image = "";
+                                String path = "";
+
                                 int i = 0;
 
                                 for(QueryDocumentSnapshot documentSnapshot : task.getResult()){
 
                                      idUser = documentSnapshot.getId().toString();
                                      nomeUser = documentSnapshot.get("Nome").toString();
+                                     image = documentSnapshot.get("ImagemDePerfil").toString();
+                                     path = documentSnapshot.get("CaminhoImagem").toString();
 
                                     i = i + 1;
                                 }
@@ -102,6 +108,8 @@ public class MainActivity extends AppCompatActivity {
                                     user.setNome(nomeUser);
                                     user.setEmail(emailUser);
                                     user.setPassword(pass);
+                                    user.setImage(image);
+                                    user.setPathImage(path);
 
                                     singleuser s = singleuser.getInstance();
 

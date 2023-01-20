@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.Calendar;
 import java.util.Date;
 
+import com.bumptech.glide.Glide;
 import com.example.blackcomedyfinal.Adapter.jokesAdapter;
 import com.example.blackcomedyfinal.databinding.FragmentHomeBinding;
 import com.example.blackcomedyfinal.models.Jokes;
@@ -36,6 +38,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class HomeFragment extends Fragment {
@@ -55,16 +58,16 @@ public class HomeFragment extends Fragment {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         RecyclerView recyclerView = binding.recycleViewJokes;
         View root = binding.getRoot();
+
+        //Escrever o nome do utilizaddores
         utilizador = singleuser.utilizador.get(0);
-
-
-
         TextView textView = binding.textView5;
         textView.setText("Hello " + utilizador.getNome() );
+
+        ImageView imageView = binding.MainProfileImage;
+        Glide.with(getActivity().getApplicationContext()).load(utilizador.getImage()).into(imageView);
+
         Button btnPublish = binding.btnPublish;
-
-
-
         btnPublish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -72,6 +75,7 @@ public class HomeFragment extends Fragment {
                 String joke = binding.comedyText.getText().toString();
                 CreateJoke(joke);
                 ListJokes();
+
             }
         });
 
@@ -99,8 +103,23 @@ public class HomeFragment extends Fragment {
                                 jokes.setIdJoke(document.getId());
                                 jokes.setComedyText(document.get("comedyText").toString());
                                 jokes.setJokeDate(document.get("comedyDate").toString());
-                                jokes.setUser(document.get("user"));
 
+                                Object user = document.get("user");
+                                Object likes = document.get("user");
+
+                                //Toast.makeText(getActivity(), ((Map<String, Object>) user).get("image").toString(), Toast.LENGTH_SHORT).show();
+
+                                jokes.setUser(user);
+                                jokes.setLikes(likes);
+
+
+                                if(document.get("comedyAudio") != null){
+                                    //jokes.setAudioFormat(document);
+                                }else{
+                                    jokes.setAudioFormat(null);
+                                }
+
+                                jokes.setLikes((List<String>) document.get("Likes"));
                                 jokesArray.add(jokes);
                             }
                         } else {
@@ -117,6 +136,7 @@ public class HomeFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(jokesAdapter);
+
 
     }
 
@@ -140,6 +160,7 @@ public class HomeFragment extends Fragment {
             comedy.put("comedyText", joke);
             comedy.put("comedyAudio", null);
             comedy.put("comedyDate",currentTime.toString());
+            comedy.put("Likes", null);
             comedy.put("user", utilizador);
 
             // Add a new document with a generated ID
@@ -157,7 +178,7 @@ public class HomeFragment extends Fragment {
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            Log.w("TAG", "Error adding document", e);
+                            Log.e("TAG", "Error adding document", e);
                         }
                     });
         }

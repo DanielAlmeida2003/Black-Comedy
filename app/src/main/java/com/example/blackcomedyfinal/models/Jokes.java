@@ -3,13 +3,35 @@ package com.example.blackcomedyfinal.models;
 import android.media.AudioFormat;
 
 import java.util.Date;
+import java.util.List;
 
 public class Jokes {
 
     String comedyText, idJoke;
+
+    Object user,likes;
+
+
     String jokeDate;
     AudioFormat audioFormat;
-    Object user;
+
+
+
+    public Object getUser() {
+        return user;
+    }
+
+    public void setUser(Object user) {
+        this.user = user;
+    }
+
+    public Object getLikes() {
+        return likes;
+    }
+
+    public void setLikes(Object likes) {
+        this.likes = likes;
+    }
 
     public String getComedyText() {
         return comedyText;
@@ -43,11 +65,4 @@ public class Jokes {
         this.audioFormat = audioFormat;
     }
 
-    public Object getUser() {
-        return user;
-    }
-
-    public void setUser(Object user) {
-        this.user = user;
-    }
 }

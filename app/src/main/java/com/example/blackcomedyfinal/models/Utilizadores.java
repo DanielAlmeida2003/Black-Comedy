@@ -2,7 +2,48 @@ package com.example.blackcomedyfinal.models;
 
 public class Utilizadores {
 
-    String id, nome , email, password;
+    String id, nome , email, password , bio, pathImage ,image;
+    Object followers, followings;
+
+    public Object getFollowings() {
+        return followings;
+    }
+
+    public void setFollowings(Object followings) {
+        this.followings = followings;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public String getPathImage() {
+        return pathImage;
+    }
+
+    public void setPathImage(String pathImage) {
+        this.pathImage = pathImage;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public String getBio() {
+        return bio;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
+    }
+
+    public Object getFollowers() {
+        return followers;
+    }
+
+    public void setFollowers(Object followers) {
+        this.followers = followers;
+    }
 
     public String getId() {
         return id;
