@@ -1,9 +1,12 @@
 package com.example.blackcomedyfinal.ui.profile;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.blackcomedyfinal.Adapter.jokesAdapter;
+import com.example.blackcomedyfinal.Settings;
 import com.example.blackcomedyfinal.databinding.FragmentProfileBinding;
 import com.example.blackcomedyfinal.models.Utilizadores;
 import com.example.blackcomedyfinal.singleton.singleJoke;
@@ -42,6 +46,18 @@ public class ProfileFragment extends Fragment {
 
         binding = FragmentProfileBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+
+        ImageButton imageButton = binding.setting;
+
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent in = new Intent(getActivity(), Settings.class);
+                startActivity(in);
+
+            }
+        });
 
         ListOneUser();
         ListPostsFromOneUser(utilizador.getId());
@@ -108,32 +124,6 @@ public class ProfileFragment extends Fragment {
         jokesProfiles.setItemAnimator(new DefaultItemAnimator());
         jokesProfiles.setAdapter(jokesAdapter);
 
-
-        /*
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("comedy")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-
-                                Object user = document.get("user");
-                                String id = (String) ((Map<String, Object>)document.get("user")).get("id");
-
-
-
-
-                            }
-                        } else {
-                            Log.w("TAG", "Error getting documents.", task.getException());
-                        }
-                    }
-                });
-
-         */
 
     }
 

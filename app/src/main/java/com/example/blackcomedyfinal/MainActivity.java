@@ -92,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
                                      idUser = documentSnapshot.getId().toString();
                                      nomeUser = documentSnapshot.get("Nome").toString();
                                      image = documentSnapshot.get("ImagemDePerfil").toString();
+                                     emailUser = documentSnapshot.get("Email").toString();
                                      path = documentSnapshot.get("CaminhoImagem").toString();
 
                                     i = i + 1;
