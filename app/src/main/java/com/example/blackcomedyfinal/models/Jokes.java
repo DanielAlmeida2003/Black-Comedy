@@ -9,12 +9,12 @@ public class Jokes {
 
     String comedyText, idJoke;
 
-    Object user,likes;
+    Object user;
 
+    List<String> likes;
 
     String jokeDate;
-    AudioFormat audioFormat;
-
+    String audioFormat;
 
 
     public Object getUser() {
@@ -25,11 +25,11 @@ public class Jokes {
         this.user = user;
     }
 
-    public Object getLikes() {
+    public List<String> getLikes() {
         return likes;
     }
 
-    public void setLikes(Object likes) {
+    public void setLikes(List<String> likes) {
         this.likes = likes;
     }
 
@@ -57,11 +57,11 @@ public class Jokes {
         this.jokeDate = jokeDate;
     }
 
-    public AudioFormat getAudioFormat() {
+    public String getAudioFormat() {
         return audioFormat;
     }
 
-    public void setAudioFormat(AudioFormat audioFormat) {
+    public void setAudioFormat(String audioFormat) {
         this.audioFormat = audioFormat;
     }
 

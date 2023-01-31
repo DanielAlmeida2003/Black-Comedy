@@ -90,6 +90,18 @@ public class Settings extends AppCompatActivity {
 
         Button btnUpdate = findViewById(R.id.update);
         Button btnBack = findViewById(R.id.back);
+        Button btnLogout = findViewById(R.id.logout);
+
+        btnLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent in = new Intent(Settings.this, MainActivity.class);
+                startActivity(in);
+                finishAffinity();
+            }
+        });
+
 
         profileImage.setOnClickListener(new View.OnClickListener() {
             @Override

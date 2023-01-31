@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -101,11 +102,19 @@ public class HomeFragment extends Fragment {
                                 Jokes jokes = new Jokes();
 
                                 jokes.setIdJoke(document.getId());
-                                jokes.setComedyText(document.get("comedyText").toString());
+
+                                if(document.get("comedyText") != null){
+                                    jokes.setComedyText(document.get("comedyText").toString());
+                                }else{
+                                    jokes.setComedyText(null);
+                                }
+
                                 jokes.setJokeDate(document.get("comedyDate").toString());
 
                                 Object user = document.get("user");
-                                Object likes = document.get("user");
+                                Map<String, String> map = (Map<String, String>) document.get("user");
+                                List<String> likes = new ArrayList<String>(map.values());
+
 
                                 //Toast.makeText(getActivity(), ((Map<String, Object>) user).get("image").toString(), Toast.LENGTH_SHORT).show();
 
@@ -114,12 +123,14 @@ public class HomeFragment extends Fragment {
 
 
                                 if(document.get("comedyAudio") != null){
-                                    //jokes.setAudioFormat(document);
+                                    jokes.setAudioFormat(document.get("comedyAudio").toString());
                                 }else{
                                     jokes.setAudioFormat(null);
                                 }
 
                                 jokes.setLikes((List<String>) document.get("Likes"));
+
+
                                 jokesArray.add(jokes);
                             }
                         } else {
